@@ -2,8 +2,20 @@
 import CodeMirror from '../node_modules/codemirror/src/codemirror.js';
 self.CodeMirror = CodeMirror;
 
+// all extra features, load feature-related stuff in
+// this Object
+window.WCCodeMirrorExtras = {languages : {}}
+
 /**
  * WCCodeMirror
+ *
+ * html attributes of the class
+ *
+ * src
+ * style
+ * viewport-margin
+ * readonly
+ * featured - adds special features
  */
 export class WCCodeMirror extends HTMLElement {
   static get observedAttributes () {
@@ -27,6 +39,14 @@ export class WCCodeMirror extends HTMLElement {
   set value (value) {
     this.setValue(value);
   }
+
+	get mode() {
+		return this.getAttribute('mode')
+	}
+
+	set mode(value){
+		return this.setAttribute('mode', value);
+	}
 
   constructor () {
     super();
@@ -79,6 +99,11 @@ export class WCCodeMirror extends HTMLElement {
       this.setValue(content);
     }
 
+    // add special features
+    if (this.hasAttribute('featured')){
+      this.addSpecialFeatures()
+    }
+
     this.__initialized = true;
   }
 
@@ -96,7 +121,7 @@ export class WCCodeMirror extends HTMLElement {
 
   async fetchSrc (src) {
     const response = await fetch(src);
-    return response.text();
+	  return response.text();
   }
 
   static template () {
@@ -147,6 +172,50 @@ export class WCCodeMirror extends HTMLElement {
 
     return fixedLines.join('\n');
   }
+
+  /**
+   * adds special features to the code mirror
+   */ 
+  async addSpecialFeatures(){
+		if(!this.mode){
+			return console.error("wc-codemirror : the features attribute cannot be put without a mode attribute, please specify a mode attribute !")
+		}
+
+		if(!WCCodeMirrorExtras.languages[this.mode]){
+			return console.error('wc-codemirror : specified mode does not have an associated script file, please add the "special-features" script file for this language');
+		}
+
+		this.insertAdjacentHTML('beforeend', `
+		   <div class="wc-codemirror-featured">
+			     <input type="button" class="wc-codemirror-featured-run-btn" value=">">
+			     <input type="button" class="wc-codemirror-featured-copy-btn" value="copy">
+			 </div>
+		`)
+
+
+		/**
+		 * TODO: sometimes you might have to compile before running, show an indicator for that
+		 */
+		this.featuresStuff = {
+			// all of the elements in the div with features
+			elements : {
+				div: this.querySelector('.wc-codemirror-featured'),
+				copy: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-copy-btn'),
+				run: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-run-btn'),
+			},
+			abilities : WCCodeMirrorExtras.languages[this.mode].abilities
+		}
+
+		const abilities = this.featuresStuff.abilities;
+		const elements = this.featuresStuff.elements;
+
+		elements.run.addEventListener('click', () => this.run());
+	}
+
+	/** to run the code **/
+	run(){
+		this.featuresStuff.abilities.run()
+	}
 }
 
 document.body.insertAdjacentHTML('beforeend', `
@@ -500,6 +569,26 @@ div.CodeMirror-dragcursors {
 
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
+
+
+/**
+ * wc-codemirror stuff
+ */
+.wc-codemirror-featured{
+	margin: 10px;
+}
+
+.wc-codemirror-featured-run-btn {
+	height: 30px;
+	width: 30px;
+	border: 1px solid #370606;
+	padding: 0 0px 3px 2px;
+	border-radius: 25px;
+	background: #37bf37;
+	color: white;
+	font-size: 20px;
+	cursor:pointer;
+}
 </style>
 `);
 
