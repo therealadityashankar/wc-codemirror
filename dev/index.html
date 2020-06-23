@@ -15,20 +15,7 @@
   <!-- basic -->
   <!-- <wc-codemirror></wc-codemirror> -->
 
-  <!-- external -->
-  <!-- <wc-codemirror src="sample.txt"></wc-codemirror> -->
-
   <!-- inline -->
-  <wc-codemirror mode="javascript" featured>
-    <script type="wc-content">
-        function myGoodPerson(){
-            return "what can I do for you ?"
-        }
-    </script>
-  </wc-codemirror>
-
-  <!-- inline read-only -->
-  <!-- <wc-codemirror mode="javascript" readonly>
     <script type="wc-content">
         function myGoodPerson(){
             return "what can I do for you ?"
@@ -36,14 +23,8 @@
     </script>
   </wc-codemirror> -->
 
-  <!-- inline read-only="nocursor" -->
-  <!-- <wc-codemirror mode="javascript" readonly="nocursor">
-    <script type="wc-content">
-        function myGoodPerson(){
-            return "what can I do for you ?"
-        }
-    </script>
-  </wc-codemirror> -->
+  <!-- external -->
+  <!--<wc-codemirror src="sample.txt"></wc-codemirror>-->
 
   <!-- syntax-highlighting -->
   <!-- <wc-codemirror mode="javascript"></wc-codemirror> -->
@@ -56,6 +37,31 @@
 
   <!-- viewport-margin -->
   <!-- <wc-codemirror viewport-margin="infinity"></wc-codemirror> -->
+
+  <!-- read-only -->
+  <wc-codemirror mode="javascript" readonly>
+    <script type="wc-content">
+			function myGoodPerson(){
+				return "what can I do for you ?"
+			}
+    </script>
+	</wc-codemirror> 
+
+  <!-- inline escape <script> -->
+  <!-- TODO: make this a test -->
+  <wc-codemirror>
+    <script type="wc-content">
+      &lt;script&gt;&lt;/script&gt;
+    </script>
+  </wc-codemirror>
+
+  <!-- inline escape <script type="module"> -->
+  <!-- TODO: make this a test -->
+  <wc-codemirror>
+    <script type="wc-content">
+      &lt;script type="module"&gt;&lt;/script&gt;
+    </script>
+  </wc-codemirror>
 
 </body>
 </html>
