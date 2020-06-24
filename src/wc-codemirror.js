@@ -122,13 +122,8 @@ export class WCCodeMirror extends HTMLElement {
   }
 
   async fetchSrc (src) {
-<<<<<<< HEAD
-    const response = await fetch(src);
-	  return response.text();
-=======
     const response = await fetch(src)
     return response.text()
->>>>>>> master
   }
 
   static template () {
@@ -150,17 +145,10 @@ export class WCCodeMirror extends HTMLElement {
     // remove the first line if it is an empty line
     if (lines[0] === '') lines.splice(0, 1)
 
-<<<<<<< HEAD
-    const initline = lines[0];
-    let fwdPad = 0;
-    const usingTabs = initline[0] === '\t';
-    const checkChar = usingTabs ? '\t' : ' ';
-=======
     const initline = lines[0]
     let fwdPad = 0
     const usingTabs = initline[0] === '\t'
     const checkChar = usingTabs ? '\t' : ' '
->>>>>>> master
 
     while (true) {
       if (initline[fwdPad] === checkChar) {
