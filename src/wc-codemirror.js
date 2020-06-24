@@ -195,7 +195,9 @@ export class WCCodeMirror extends HTMLElement {
 			     <input type="button" 
 					        class="wc-codemirror-featured-copy-btn" 
 									value="⎘ copy to clipboard">
-					 <div class="wc-codemirror-console"></div>
+					 <div class="wc-codemirror-console">
+					   <ol></ol>
+					 </div>
 			 </div>
 		`)
 
@@ -208,21 +210,16 @@ export class WCCodeMirror extends HTMLElement {
         div: this.querySelector('.wc-codemirror-featured'),
         copy: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-copy-btn'),
         run: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-run-btn'),
-        console: this.querySelector('.wc-codemirror-featured .wc-codemirror-console')
+        console: this.querySelector('.wc-codemirror-featured .wc-codemirror-console'),
+				consoleList: this.querySelector('.wc-codemirror-featured .wc-codemirror-console ol')
       },
       abilities: WCCodeMirrorExtras.languages[this.mode].abilities,
-			consoleSize: 0,
       addToConsole (content) {
-				this.consoleSize++
-        const console = this.elements.console
-				const lineRepr = document.createElement('div')
-				const lineNum = document.createElement('span')
+        const consoleList = this.elements.consoleList
+				const lineRepr = document.createElement('li')
 				lineRepr.classList.add('wc-codemirror-featured-line')
-				lineNum.innerText = this.consoleSize
-				lineNum.classList.add('wc-codemirror-featured-line-num')
-				lineRepr.appendChild(lineNum)
 				lineRepr.appendChild(content)
-        console.appendChild(lineRepr)
+        consoleList.appendChild(lineRepr)
       }
     }
 
@@ -238,8 +235,7 @@ export class WCCodeMirror extends HTMLElement {
 
   /** to run the code **/
   run () {
-    this.featuresStuff.elements.console.innerHTML = ''
-		this.featuresStuff.consoleSize = 0;
+    this.featuresStuff.elements.consoleList.innerHTML = ''
     this.featuresStuff.abilities.run(this)
   }
 }

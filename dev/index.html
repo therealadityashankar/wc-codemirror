@@ -59,9 +59,11 @@
   <!-- featured complex example -->
 	<wc-codemirror mode="javascript" featured>
 		<script type="wc-content">
-      const resp = await fetch("https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous?blacklistFlags=nsfw,religious,racist,sexist&type=single");
-      const content = await resp.json();
-      console.log(content.joke);
+			for(var i=0; i<5; i++){
+				const resp = await fetch("https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous?blacklistFlags=nsfw,religious,racist,sexist&type=single");
+				const content = await resp.json();
+				console.log(content.joke);
+			}
 		</script>
 	</wc-codemirror>
 
