@@ -349,5 +349,30 @@ div.CodeMirror-dragcursors {
 
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
+
+.wc-codemirror-featured{
+	margin: 5px 10px;
+}
+
+.wc-codemirror-featured-run-btn{
+  padding: 4px 7px 6px 10px;
+	border: 1px solid grey;
+	border-radius: 15px;
+}
+
+.wc-codemirror-featured-copy-btn{
+	border: 1px solid grey; 
+	padding: 5px 10px;
+	border-radius: 3px;
+}
+
+.wc-codemirror-console{
+	margin : 5px;
+	border: 1px solid grey;
+	border-radius : 5px;
+	padding : 5px;
+	font-family: monospace;
+}
+
 </style>
 `);

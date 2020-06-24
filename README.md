@@ -39,6 +39,7 @@ Try it on [WebComponents.dev](https://webcomponents.dev/edit/uQEePfQ92jOWOpupDzp
 - `style` - CSS styling (default `height:100%;width:100%;`)
 - `viewport-margin`<sup>1</sup> - sets the `viewportMargin` option of the CodeMirrror editor instance (default `10`)
 - `readonly` - sets the codemirror's "readOnly" configuration attribute to true, you may set `readonly="nocursor"` if you want to disable the cursor and not let the user copy the text inside
+- `featured` - see [featured](#featured)
 
 *<sup>1</sup>Setting `viewport-margin` to `infinity` will auto-resize the editor to its contents. To see this in action, check out the [CodeMirror Auto-Resize Demo](https://codemirror.net/demo/resize.html).*
 
@@ -110,3 +111,10 @@ Then specify the theme with the `theme` attribute
 ```
 
 *Note: Check out the [CodeMirror Theme Demo](https://codemirror.net/demo/theme.html) to try sample the full selection of editor themes.*
+
+
+### Featured
+
+wanna up the features a notch ?
+
+add the "featured" attribute and wc-codemirror will be able to run and copy code !

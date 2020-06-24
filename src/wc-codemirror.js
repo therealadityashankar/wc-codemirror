@@ -191,8 +191,11 @@ export class WCCodeMirror extends HTMLElement {
 
 		this.insertAdjacentHTML('beforeend', `
 		   <div class="wc-codemirror-featured">
-			     <input type="button" class="wc-codemirror-featured-run-btn" value=">">
-			     <input type="button" class="wc-codemirror-featured-copy-btn" value="copy">
+			     <input type="button" class="wc-codemirror-featured-run-btn" value="▶">
+			     <input type="button" 
+					        class="wc-codemirror-featured-copy-btn" 
+									value="copy to clipboard">
+					 <div class="wc-codemirror-console"></div>
 			 </div>
 		`)
 
@@ -206,19 +209,29 @@ export class WCCodeMirror extends HTMLElement {
 				div: this.querySelector('.wc-codemirror-featured'),
 				copy: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-copy-btn'),
 				run: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-run-btn'),
+				console: this.querySelector('.wc-codemirror-featured .wc-codemirror-console')
 			},
-			abilities : WCCodeMirrorExtras.languages[this.mode].abilities
+			abilities : WCCodeMirrorExtras.languages[this.mode].abilities,
+			addToConsole(content){
+				const console = this.elements.console;
+				console.appendChild(content);
+			}
 		}
 
 		const abilities = this.featuresStuff.abilities;
 		const elements = this.featuresStuff.elements;
+
+		this.addEventListener('click', async () => {
+			await navigator.clipboard.writeText(this.value);
+		});
 
 		elements.run.addEventListener('click', () => this.run());
 	}
 
 	/** to run the code **/
 	run(){
-		this.featuresStuff.abilities.run()
+		this.featuresStuff.elements.console.innerHTML = "";
+		this.featuresStuff.abilities.run(this)
 	}
 }
 
