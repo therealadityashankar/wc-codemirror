@@ -229,7 +229,7 @@ export class WCCodeMirror extends HTMLElement {
     const abilities = this.featuresStuff.abilities
     const elements = this.featuresStuff.elements
 
-    this.addEventListener('click', async () => {
+    elements.copy.addEventListener('click', async () => {
       await navigator.clipboard.writeText(this.value)
     })
 

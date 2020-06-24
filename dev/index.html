@@ -49,10 +49,19 @@
 	<!--</wc-codemirror> -->
 
   <!-- featured -->
+	<!--<wc-codemirror mode="javascript" featured>-->
+		<!--<script type="wc-content">-->
+				<!--console.log('jiggity wiggity');-->
+				<!--console.log('jiggity wiggity #2');-->
+		<!--</script>-->
+	<!--</wc-codemirror>-->
+
+  <!-- featured complex example -->
 	<wc-codemirror mode="javascript" featured>
 		<script type="wc-content">
-				console.log('jiggity wiggity');
-				console.log('jiggity wiggity #2');
+      const resp = await fetch("https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous?blacklistFlags=nsfw,religious,racist,sexist&type=single");
+      const content = await resp.json();
+      console.log(content.joke);
 		</script>
 	</wc-codemirror>
 
