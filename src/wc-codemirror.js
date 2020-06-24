@@ -211,9 +211,18 @@ export class WCCodeMirror extends HTMLElement {
         console: this.querySelector('.wc-codemirror-featured .wc-codemirror-console')
       },
       abilities: WCCodeMirrorExtras.languages[this.mode].abilities,
+			consoleSize: 0,
       addToConsole (content) {
+				this.consoleSize++
         const console = this.elements.console
-        console.appendChild(content)
+				const lineRepr = document.createElement('div')
+				const lineNum = document.createElement('span')
+				lineRepr.classList.add('wc-codemirror-featured-line')
+				lineNum.innerText = this.consoleSize
+				lineNum.classList.add('wc-codemirror-featured-line-num')
+				lineRepr.appendChild(lineNum)
+				lineRepr.appendChild(content)
+        console.appendChild(lineRepr)
       }
     }
 
@@ -230,6 +239,7 @@ export class WCCodeMirror extends HTMLElement {
   /** to run the code **/
   run () {
     this.featuresStuff.elements.console.innerHTML = ''
+		this.featuresStuff.consoleSize = 0;
     this.featuresStuff.abilities.run(this)
   }
 }

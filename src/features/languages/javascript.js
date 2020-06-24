@@ -10,9 +10,9 @@ window.WCCodeMirrorExtras.languages.javascript = {
       const initConsoleLog = window.console.log
 
       function alternateConsoleLog (value) {
-        const abc = document.createElement('div')
-        abc.innerText = value
-        webcomponent.featuresStuff.addToConsole(abc)
+        const val = document.createElement('span')
+        val.innerText = value
+        webcomponent.featuresStuff.addToConsole(val)
       }
 
       window.console.log = alternateConsoleLog

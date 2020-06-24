@@ -374,5 +374,16 @@ span.CodeMirror-selectedtext { background: none; }
 	font-family: monospace;
 }
 
+.wc-codemirror-featured-line{
+	padding: 6px 2px;
+	border-bottom : 1px solid grey;
+}
+
+.wc-codemirror-featured-line-num{
+  background: #c8c7c7;
+	padding: 3px;
+	margin-right: 3px;
+}
+
 </style>
 `)
