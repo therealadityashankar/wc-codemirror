@@ -6,7 +6,7 @@ self.CodeMirror = CodeMirror
 
 // all extra features, load feature-related stuff in
 // this Object
-window.WCCodeMirrorExtras = {languages : {}}
+window.WCCodeMirrorExtras = { languages: {} }
 
 /**
  * WCCodeMirror
@@ -42,13 +42,13 @@ export class WCCodeMirror extends HTMLElement {
     this.setValue(value)
   }
 
-	get mode() {
-		return this.getAttribute('mode')
-	}
+  get mode () {
+    return this.getAttribute('mode')
+  }
 
-	set mode(value){
-		return this.setAttribute('mode', value);
-	}
+  set mode (value) {
+    return this.setAttribute('mode', value)
+  }
 
   constructor () {
     super()
@@ -103,11 +103,11 @@ export class WCCodeMirror extends HTMLElement {
     }
 
     // add special features
-    if (this.hasAttribute('featured')){
+    if (this.hasAttribute('featured')) {
       this.addSpecialFeatures()
     }
 
-    this.__initialized = true;
+    this.__initialized = true
   }
 
   async setSrc () {
@@ -179,17 +179,17 @@ export class WCCodeMirror extends HTMLElement {
 
   /**
    * adds special features to the code mirror
-   */ 
-  async addSpecialFeatures(){
-		if(!this.mode){
-			return console.error("wc-codemirror : the features attribute cannot be put without a mode attribute, please specify a mode attribute !")
-		}
+   */
+  async addSpecialFeatures () {
+    if (!this.mode) {
+      return console.error('wc-codemirror : the features attribute cannot be put without a mode attribute, please specify a mode attribute !')
+    }
 
-		if(!WCCodeMirrorExtras.languages[this.mode]){
-			return console.error('wc-codemirror : specified mode does not have an associated script file, please add the "special-features" script file for this language');
-		}
+    if (!WCCodeMirrorExtras.languages[this.mode]) {
+      return console.error('wc-codemirror : specified mode does not have an associated script file, please add the "special-features" script file for this language')
+    }
 
-		this.insertAdjacentHTML('beforeend', `
+    this.insertAdjacentHTML('beforeend', `
 		   <div class="wc-codemirror-featured">
 			     <input type="button" class="wc-codemirror-featured-run-btn" value="▶">
 			     <input type="button" 
@@ -199,40 +199,39 @@ export class WCCodeMirror extends HTMLElement {
 			 </div>
 		`)
 
-
-		/**
+    /**
 		 * TODO: sometimes you might have to compile before running, show an indicator for that
 		 */
-		this.featuresStuff = {
-			// all of the elements in the div with features
-			elements : {
-				div: this.querySelector('.wc-codemirror-featured'),
-				copy: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-copy-btn'),
-				run: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-run-btn'),
-				console: this.querySelector('.wc-codemirror-featured .wc-codemirror-console')
-			},
-			abilities : WCCodeMirrorExtras.languages[this.mode].abilities,
-			addToConsole(content){
-				const console = this.elements.console;
-				console.appendChild(content);
-			}
-		}
+    this.featuresStuff = {
+      // all of the elements in the div with features
+      elements: {
+        div: this.querySelector('.wc-codemirror-featured'),
+        copy: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-copy-btn'),
+        run: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-run-btn'),
+        console: this.querySelector('.wc-codemirror-featured .wc-codemirror-console')
+      },
+      abilities: WCCodeMirrorExtras.languages[this.mode].abilities,
+      addToConsole (content) {
+        const console = this.elements.console
+        console.appendChild(content)
+      }
+    }
 
-		const abilities = this.featuresStuff.abilities;
-		const elements = this.featuresStuff.elements;
+    const abilities = this.featuresStuff.abilities
+    const elements = this.featuresStuff.elements
 
-		this.addEventListener('click', async () => {
-			await navigator.clipboard.writeText(this.value);
-		});
+    this.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(this.value)
+    })
 
-		elements.run.addEventListener('click', () => this.run());
-	}
+    elements.run.addEventListener('click', () => this.run())
+  }
 
-	/** to run the code **/
-	run(){
-		this.featuresStuff.elements.console.innerHTML = "";
-		this.featuresStuff.abilities.run(this)
-	}
+  /** to run the code **/
+  run () {
+    this.featuresStuff.elements.console.innerHTML = ''
+    this.featuresStuff.abilities.run(this)
+  }
 }
 
 customElements.define('wc-codemirror', WCCodeMirror)
