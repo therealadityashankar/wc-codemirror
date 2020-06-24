@@ -8,6 +8,26 @@ self.CodeMirror = CodeMirror
 // this Object
 window.WCCodeMirrorExtras = { languages: {} }
 
+// TODO: put everything in this variable
+//
+// because Function() is anonymous and runs on the global scope
+// in order to access the console, you'll have to access the codemirror
+// from the global scope, this requires all codeMirrors to be identifiable
+// by some means
+window.WCCodeMirrorStuff = {
+	newWCNumber: 0,
+	allWCCodeMirrors: {},
+	addWCCodeMirror(wc){
+		this.allWCCodeMirrors[this.newWCNumber] = wc;
+		const WCNumber = this.newWCNumber;
+		this.newWCNumber++;
+		return WCNumber
+	},
+	getWCCodeMirror(codeMirrorNum){
+		return this.allWCCodeMirrors[codeMirrorNum];
+	}
+}
+
 /**
  * WCCodeMirror
  *
@@ -58,6 +78,7 @@ export class WCCodeMirror extends HTMLElement {
     this.__initialized = false
     this.__element = null
     this.editor = null
+		this.WCCodeMirrorID = WCCodeMirrorStuff.addWCCodeMirror(this);
   }
 
   async connectedCallback () {
@@ -204,7 +225,7 @@ export class WCCodeMirror extends HTMLElement {
     /**
 		 * TODO: sometimes you might have to compile before running, show an indicator for that
 		 */
-    this.featuresStuff = {
+    this.featured = {
       // all of the elements in the div with features
       elements: {
         div: this.querySelector('.wc-codemirror-featured'),
@@ -214,17 +235,12 @@ export class WCCodeMirror extends HTMLElement {
 				consoleList: this.querySelector('.wc-codemirror-featured .wc-codemirror-console ol')
       },
       abilities: WCCodeMirrorExtras.languages[this.mode].abilities,
-      addToConsole (content) {
-        const consoleList = this.elements.consoleList
-				const lineRepr = document.createElement('li')
-				lineRepr.classList.add('wc-codemirror-featured-line')
-				lineRepr.appendChild(content)
-        consoleList.appendChild(lineRepr)
-      }
     }
 
-    const abilities = this.featuresStuff.abilities
-    const elements = this.featuresStuff.elements
+		this.console = new WCCodeMirrorConsole(this)
+
+    const abilities = this.featured.abilities
+    const elements = this.featured.elements
 
     elements.copy.addEventListener('click', async () => {
       await navigator.clipboard.writeText(this.value)
@@ -235,9 +251,49 @@ export class WCCodeMirror extends HTMLElement {
 
   /** to run the code **/
   run () {
-    this.featuresStuff.elements.consoleList.innerHTML = ''
-    this.featuresStuff.abilities.run(this)
+    this.console.clear()
+    this.featured.abilities.run(this)
   }
 }
+
+
+/**
+ * a web component console
+ */
+class WCCodeMirrorConsole{
+	constructor(webcomponent){
+		this.wc = webcomponent
+		this.elList = this.wc.featured.elements.consoleList
+	}
+
+	/**
+	 * add something to the console
+	 */
+	add(el){
+		const fs = this.wc.featured;
+		const consoleList = fs.elements.consoleList
+		const lineRepr = document.createElement('li')
+		lineRepr.classList.add('wc-codemirror-featured-line')
+		lineRepr.appendChild(el)
+		consoleList.appendChild(lineRepr)
+	}
+
+	/**
+	 * add some text to the console
+	 */
+	addText(text){
+				const logSpan = document.createElement("span")
+				logSpan.innerText = text
+				this.add(logSpan);
+	}
+
+	/**
+	 * clear the console
+	 */
+	clear(){
+		this.elList.innerHTML = ''
+	}
+}
+
 
 customElements.define('wc-codemirror', WCCodeMirror)

@@ -10093,6 +10093,34 @@ div.CodeMirror-dragcursors {
 
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
+
+.wc-codemirror-featured{
+	margin: 5px 10px;
+}
+
+.wc-codemirror-featured-run-btn{
+  padding: 4px 7px 6px 10px;
+	border: 1px solid grey;
+	border-radius: 15px;
+}
+
+.wc-codemirror-featured-copy-btn{
+	border: 1px solid grey; 
+	padding: 5px 10px;
+	border-radius: 3px;
+}
+
+.wc-codemirror-console{
+	margin : 5px;
+	border: 1px solid grey;
+	border-radius : 5px;
+	padding : 5px;
+	font-family: monospace;
+}
+
+.wc-codemirror-featured-line{
+	padding: 6px 2px;
+}
 </style>
 `);
 
@@ -10100,8 +10128,20 @@ span.CodeMirror-selectedtext { background: none; }
 
 self.CodeMirror = CodeMirror;
 
+// all extra features, load feature-related stuff in
+// this Object
+window.WCCodeMirrorExtras = { languages: {} };
+
 /**
  * WCCodeMirror
+ *
+ * html attributes of the class
+ *
+ * src
+ * style
+ * viewport-margin
+ * readonly
+ * featured - adds special features
  */
 class WCCodeMirror extends HTMLElement {
   static get observedAttributes () {
@@ -10124,6 +10164,14 @@ class WCCodeMirror extends HTMLElement {
   get value () { return this.editor.getValue() }
   set value (value) {
     this.setValue(value);
+  }
+
+  get mode () {
+    return this.getAttribute('mode')
+  }
+
+  set mode (value) {
+    return this.setAttribute('mode', value)
   }
 
   constructor () {
@@ -10176,6 +10224,11 @@ class WCCodeMirror extends HTMLElement {
       // delay until editor initializes
       await new Promise(resolve => setTimeout(resolve, 50));
       this.value = content;
+    }
+
+    // add special features
+    if (this.hasAttribute('featured')) {
+      this.addSpecialFeatures();
     }
 
     this.__initialized = true;
@@ -10246,6 +10299,68 @@ class WCCodeMirror extends HTMLElement {
     if (fixedLines[fixedLines.length - 1] === '') fixedLines.splice(fixedLines.length - 1, 1);
 
     return fixedLines.join('\n')
+  }
+
+  /**
+   * adds special features to the code mirror
+   */
+  async addSpecialFeatures () {
+    if (!this.mode) {
+      return console.error('wc-codemirror : the features attribute cannot be put without a mode attribute, please specify a mode attribute !')
+    }
+
+    if (!WCCodeMirrorExtras.languages[this.mode]) {
+      return console.error('wc-codemirror : specified mode does not have an associated script file, please add the "special-features" script file for this language')
+    }
+
+    this.insertAdjacentHTML('beforeend', `
+		   <div class="wc-codemirror-featured">
+			     <input type="button" class="wc-codemirror-featured-run-btn" value="▶ run code">
+			     <input type="button" 
+					        class="wc-codemirror-featured-copy-btn" 
+									value="⎘ copy to clipboard">
+					 <div class="wc-codemirror-console">
+					   <ol></ol>
+					 </div>
+			 </div>
+		`);
+
+    /**
+		 * TODO: sometimes you might have to compile before running, show an indicator for that
+		 */
+    this.featuresStuff = {
+      // all of the elements in the div with features
+      elements: {
+        div: this.querySelector('.wc-codemirror-featured'),
+        copy: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-copy-btn'),
+        run: this.querySelector('.wc-codemirror-featured .wc-codemirror-featured-run-btn'),
+        console: this.querySelector('.wc-codemirror-featured .wc-codemirror-console'),
+				consoleList: this.querySelector('.wc-codemirror-featured .wc-codemirror-console ol')
+      },
+      abilities: WCCodeMirrorExtras.languages[this.mode].abilities,
+      addToConsole (content) {
+        const consoleList = this.elements.consoleList;
+				const lineRepr = document.createElement('li');
+				lineRepr.classList.add('wc-codemirror-featured-line');
+				lineRepr.appendChild(content);
+        consoleList.appendChild(lineRepr);
+      }
+    };
+
+    const abilities = this.featuresStuff.abilities;
+    const elements = this.featuresStuff.elements;
+
+    elements.copy.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(this.value);
+    });
+
+    elements.run.addEventListener('click', () => this.run());
+  }
+
+  /** to run the code **/
+  run () {
+    this.featuresStuff.elements.consoleList.innerHTML = '';
+    this.featuresStuff.abilities.run(this);
   }
 }
 
