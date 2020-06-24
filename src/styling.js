@@ -375,4 +375,4 @@ span.CodeMirror-selectedtext { background: none; }
 }
 
 </style>
-`);
+`)
