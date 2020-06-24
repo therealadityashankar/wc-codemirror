@@ -194,7 +194,7 @@ export class WCCodeMirror extends HTMLElement {
 			     <input type="button" class="wc-codemirror-featured-run-btn" value="▶ run code">
 			     <input type="button" 
 					        class="wc-codemirror-featured-copy-btn" 
-									value="copy to clipboard">
+									value="⎘ copy to clipboard">
 					 <div class="wc-codemirror-console"></div>
 			 </div>
 		`)
