@@ -191,7 +191,7 @@ export class WCCodeMirror extends HTMLElement {
 
     this.insertAdjacentHTML('beforeend', `
 		   <div class="wc-codemirror-featured">
-			     <input type="button" class="wc-codemirror-featured-run-btn" value="▶">
+			     <input type="button" class="wc-codemirror-featured-run-btn" value="▶ run code">
 			     <input type="button" 
 					        class="wc-codemirror-featured-copy-btn" 
 									value="copy to clipboard">
