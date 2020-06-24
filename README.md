@@ -118,3 +118,20 @@ Then specify the theme with the `theme` attribute
 wanna up the features a notch ?
 
 add the "featured" attribute and wc-codemirror will be able to run and copy code !
+
+Example:
+
+```html
+<wc-codemirror mode="javascript" featured>
+    <script type="wc-content">
+        for(var i=0; i<5; i++){
+            const resp = await fetch("https://sv443.net/jokeapi/v2/joke/Programming,Miscellaneous?blacklistFlags=nsfw,religious,racist,sexist&type=single");
+            const content = await resp.json();
+            console.log(content.joke);
+        }
+    </script>
+</wc-codemirror>
+```
+
+pro : top-level await works !
+caveat : `import val from url` syntax does not work so you'll have to use [await import()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports)
